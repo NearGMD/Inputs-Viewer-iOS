@@ -10,6 +10,8 @@ enum class SettingEventType {
     BackgroundColor,
     OutlineColor,
     TextColor,
+    KeyAppearance,
+    RefreshView
 };
 
 // Simple event object carrying the type
