@@ -8,10 +8,12 @@ IVNodeButton::IVNodeButton() {}
 
 IVNodeButton* IVNodeButton::create(const char* labelText) {
     auto ret = new (std::nothrow) IVNodeButton();
+
     if (ret && ret->init(labelText)) {
         ret->autorelease();
         return ret;
     }
+
     delete ret;
     return nullptr;
 }
@@ -20,10 +22,15 @@ bool IVNodeButton::init(const char* labelText) {
     if (!IVNodeBase::init())
         return false;
 
-    // Create label
-    m_label = CCLabelBMFont::create(labelText, "chatFont.fnt");
-    m_label->setScale(0.6f);
-    this->addChild(m_label);
+    m_label = CCLabelBMFont::create(
+        labelText ? labelText : "",
+        "chatFont.fnt"
+    );
+
+    if (m_label) {
+        m_label->setScale(0.6f);
+        this->addChild(m_label);
+    }
 
     return true;
 }
@@ -31,16 +38,26 @@ bool IVNodeButton::init(const char* labelText) {
 void IVNodeButton::setPressed(bool pressed) {
     m_pressed = pressed;
 
-    // Simple visual feedback
-    this->setOpacity(pressed ? 180 : 255);
+    if (m_label) {
+        m_label->setOpacity(pressed ? 180 : 255);
+    }
+
     this->setScale(pressed ? 0.95f : 1.0f);
+
+    refreshAppearance();
 }
 
 void IVNodeButton::refreshAppearance() {
-    // Update label color based on pressed state
-    if (m_label) {
-        m_label->setColor(m_pressed ? ccRED : ccWHITE);
-    }
+    if (!m_label)
+        return;
+
+    m_label->setColor(
+        m_pressed ? ccRED : ccWHITE
+    );
+
+    m_label->setOpacity(
+        m_pressed ? 180 : 255
+    );
 }
 
 GEODE_NS_IV_END
