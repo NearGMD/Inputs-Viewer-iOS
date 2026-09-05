@@ -6,6 +6,7 @@
 #include "IVEvent.hpp"
 #include "IVLevelSettings.hpp"
 #include "node/IVPlayerInputNode.hpp"
+#include "IVManager.hpp"
 
 GEODE_NS_IV_BEGIN
 
