@@ -31,7 +31,7 @@ protected:
         float width,
         float height,
         bool enableGeodeSettingButton
-    ) override;
+    );
 
     void setLevelSettings(LevelSettingsType type);
     void updateSettingNodes();
