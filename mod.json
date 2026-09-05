@@ -1,0 +1,46 @@
+{
+	"geode": "5.7.1",
+	"gd": {
+		"win": "2.2081",
+		"mac": "2.2081",
+		"android": "2.2081",
+		"ios": "2.2081"
+	},
+	"id": "khronophobia.inputs_viewer",
+	"name": "Inputs Viewer",
+	"version": "v1.3.1",
+	"developer": "Khronophobia",
+	"description": "Shows player inputs during gameplay.",
+	"links": {
+		"source": "https://github.com/Khronophobia/Inputs-Viewer"
+	},
+	"tags": ["interface"],
+	"resources": {
+		"sprites": ["resources/*.png"]
+	},
+	"dependencies": [
+		{
+			"id": "geode.node-ids",
+			"version": ">=1.23.0",
+			"importance": "required"
+		}
+	],
+	"settings": {
+		"category-logic": { "name": "Logic", "type": "title" },
+		"cps-calculation": {
+			"name": "CPS Calculation",
+			"type": "string",
+			"default": "Real-Time",
+			"one-of": ["Real-Time", "Per Second"]
+		},
+		"category-appearance": { "name": "Appearance", "type": "title" },
+		"background-press-color": { "name": "Background Press Color", "type": "rgba", "default": [255, 255, 255, 255] },
+		"background-release-color": { "name": "Background Release Color", "type": "rgba", "default": [0, 0, 0, 127] },
+		"outline-press-color": { "name": "Outline Press Color", "type": "rgba", "default": [255, 255, 255, 255] },
+		"outline-release-color": { "name": "Outline Release Color", "type": "rgba", "default": [255, 255, 255, 255] },
+		"text-press-color": { "name": "Text Press Color", "type": "rgba", "default": [0, 0, 0, 255] },
+		"text-release-color": { "name": "Text Release Color", "type": "rgba", "default": [255, 255, 255, 255] },
+		"ui-setting-in-pause": { "name": "Settings Button in Pause Menu", "type": "bool", "default": true },
+		"open-ui-setting": { "name": "Open Display Settings", "type": "custom:ui-setting-button" }
+	}
+}
