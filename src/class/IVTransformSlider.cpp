@@ -68,7 +68,7 @@ void TransformSlider::setLevelSettings(LevelSettingsType type) {
 }
 
 void TransformSlider::onDefaultPosition(cocos2d::CCObject*) {
-    if (!m_defaultPosFunc)
+    if (!m_defaultPosFunc || !m_transform)
         return;
 
     auto& setting = m_currentSetting.get().*m_transform;
@@ -78,7 +78,7 @@ void TransformSlider::onDefaultPosition(cocos2d::CCObject*) {
 }
 
 void TransformSlider::onSetVisibility(cocos2d::CCObject*) {
-    if (!m_visibilityCheckbox)
+    if (!m_transform)
         return;
 
     auto& setting = m_currentSetting.get().*m_transform;
@@ -104,19 +104,27 @@ void TransformSlider::updateSettingNodes() {
     }
 
     if (m_xPosSlider) {
-        m_xPosSlider->setValue(setting.position.x);
+        m_xPosSlider->setValue(
+            setting.position.x,
+            true,
+            false
+        );
     }
 
     if (m_yPosSlider) {
-        m_yPosSlider->setValue(setting.position.y);
+        m_yPosSlider->setValue(
+            setting.position.y,
+            true,
+            false
+        );
     }
 
     if (m_scaleSlider) {
-        m_scaleSlider->setValue(setting.scale);
-    }
-
-    if (m_visibilityCheckbox) {
-        m_visibilityCheckbox->toggle(setting.isVisible);
+        m_scaleSlider->setValue(
+            setting.scale,
+            true,
+            false
+        );
     }
 }
 
