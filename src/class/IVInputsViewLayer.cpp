@@ -1,52 +1,85 @@
 #include "IVInputsViewLayer.hpp"
+#include "node/IVNodeContainer.hpp"
 
 using namespace geode::prelude;
 
 GEODE_NS_IV_BEGIN
 
-IVInputsViewerLayer::IVInputsViewerLayer() {}
+InputsViewLayer::InputsViewLayer(LevelSettingsType type)
+    : m_currentSetting(
+        type == LevelSettingsType::Classic
+            ? IVManager::get().m_settingClassic
+            : IVManager::get().m_settingPlatformer
+    ) {}
 
-IVInputsViewerLayer* IVInputsViewerLayer::create() {
-    auto ret = new (std::nothrow) IVInputsViewerLayer();
+InputsViewLayer* InputsViewLayer::create(LevelSettingsType type) {
+    auto ret = new (std::nothrow) InputsViewLayer(type);
     if (ret && ret->init()) {
         ret->autorelease();
         return ret;
     }
+
     delete ret;
     return nullptr;
 }
 
-bool IVInputsViewerLayer::init() {
+bool InputsViewLayer::init() {
     if (!CCLayer::init())
         return false;
 
-    m_container = IVNodeContainer::create();
-    this->addChild(m_container);
+    auto container = IVNodeContainer::create();
+    if (!container)
+        return false;
 
-    this->scheduleUpdate();
+    this->addChild(container);
+
     return true;
 }
 
-void IVInputsViewerLayer::addInputNode(IVPlayerInputNode* node) {
-    if (m_container && node) {
-        m_container->addNode(node);
-    }
+void InputsViewLayer::handleButton(
+    bool down,
+    PlayerButton input,
+    bool isP1,
+    bool updateCounters
+) {
+    // Input handling will be connected here.
 }
 
-void IVInputsViewerLayer::update(float dt) {
-    // Example input polling (replace with actual GD input hooks)
-    bool jumpPressed = cocos2d::CCKeyboardDispatcher::get()->getShiftKeyPressed();
+LevelSettings const& InputsViewLayer::getLevelSettings() const noexcept {
+    return m_currentSetting.get();
+}
 
-    // Update all children
-    auto children = m_container->getChildren();
-    if (!children) return;
+void InputsViewLayer::setLevelSettings(LevelSettingsType type) {
+    m_currentSetting = (
+        type == LevelSettingsType::Classic
+            ? IVManager::get().m_settingClassic
+            : IVManager::get().m_settingPlatformer
+    );
+}
 
-    CCObject* obj;
-    CCARRAY_FOREACH(children, obj) {
-        auto inputNode = dynamic_cast<IVPlayerInputNode*>(obj);
-        if (inputNode) {
-            inputNode->updateInputState(jumpPressed);
-        }
+void InputsViewLayer::releaseAllButtons() {
+    if (m_p1InputNode)
+        m_p1InputNode->updateInputState(false);
+
+    if (m_p2InputNode)
+        m_p2InputNode->updateInputState(false);
+}
+
+void InputsViewLayer::refreshDisplay() {
+    if (m_p1InputNode)
+        m_p1InputNode->refreshAppearance();
+
+    if (m_p2InputNode)
+        m_p2InputNode->refreshAppearance();
+}
+
+void InputsViewLayer::onSettingEvent(SettingEventType type) {
+    switch (type) {
+        case SettingEventType::BackgroundColor:
+        case SettingEventType::OutlineColor:
+        case SettingEventType::TextColor:
+            refreshDisplay();
+            break;
     }
 }
 
