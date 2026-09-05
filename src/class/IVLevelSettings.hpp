@@ -19,6 +19,10 @@ struct NodeTransform {
 struct LevelSettings {
     NodeTransform p1Transform;
     NodeTransform p2Transform;
+
+    bool showTotalInputs = true;
+    bool showCPS = true;
+    bool hideLeftRight = false;
 };
 
 GEODE_NS_IV_END
