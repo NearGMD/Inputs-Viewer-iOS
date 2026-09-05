@@ -29,11 +29,10 @@ void IVManager::loadSettings() {
     if (!saved.isObject()) return;
 
     // UNIVERSAL matjson iteration: works on ALL platforms
-    for (auto const& key : saved.keys()) {
-        auto const& value = saved[key];
-        m_levelSettings[key] =
-            matjson::Serialize<LevelSettings>::fromJson(value);
-    }
+    for (auto const& [key, value] : saved) {
+    m_levelSettings[key] =
+        matjson::Serialize<LevelSettings>::fromJson(value);
+}
 }
 
 void IVManager::saveSettings() {
