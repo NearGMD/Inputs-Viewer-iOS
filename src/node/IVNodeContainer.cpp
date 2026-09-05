@@ -8,10 +8,12 @@ IVNodeContainer::IVNodeContainer() {}
 
 IVNodeContainer* IVNodeContainer::create() {
     auto ret = new (std::nothrow) IVNodeContainer();
+
     if (ret && ret->init()) {
         ret->autorelease();
         return ret;
     }
+
     delete ret;
     return nullptr;
 }
@@ -24,18 +26,14 @@ bool IVNodeContainer::init() {
 }
 
 void IVNodeContainer::addNode(IVNodeBase* node) {
-    if (!node) return;
+    if (!node)
+        return;
+
     this->addChild(node);
 }
 
 void IVNodeContainer::refreshAppearance() {
-    // Refresh appearance for all children
-    CCArray* children = this->getChildren();
-    if (!children) return;
-
-    CCObject* obj;
-    CCARRAY_FOREACH(children, obj) {
-        auto child = dynamic_cast<IVNodeBase*>(obj);
+    for (auto child : this->getChildrenExt<IVNodeBase*>()) {
         if (child) {
             child->refreshAppearance();
         }
