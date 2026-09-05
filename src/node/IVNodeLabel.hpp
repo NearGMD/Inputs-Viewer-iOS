@@ -1,45 +1,22 @@
-#include "node/IVNodeLabel.hpp"
+#pragma once
 
-using namespace geode::prelude;
+#include "node/IVNodeBase.hpp"
 
 GEODE_NS_IV_BEGIN
 
-IVNodeLabel::IVNodeLabel() {}
+class IVNodeLabel : public IVNodeBase {
+public:
+    IVNodeLabel();
 
-IVNodeLabel* IVNodeLabel::create(const char* text) {
-    auto ret = new (std::nothrow) IVNodeLabel();
-    if (ret && ret->init(text)) {
-        ret->autorelease();
-        return ret;
-    }
-    delete ret;
-    return nullptr;
-}
+    static IVNodeLabel* create(const char* text);
 
-bool IVNodeLabel::init(const char* text) {
-    if (!IVNodeBase::init())
-        return false;
+    bool init(const char* text);
 
-    m_label = CCLabelBMFont::create(text, "chatFont.fnt");
-    if (m_label) {
-        m_label->setScale(0.6f);
-        this->addChild(m_label);
-    }
+    void setText(const char* text);
+    void refreshAppearance() override;
 
-    return true;
-}
-
-void IVNodeLabel::setText(const char* text) {
-    if (m_label) {
-        m_label->setString(text);
-    }
-}
-
-void IVNodeLabel::refreshAppearance() {
-    if (!m_label) return;
-
-    // Simple color styling
-    m_label->setColor(ccWHITE);
-}
+protected:
+    cocos2d::CCLabelBMFont* m_label = nullptr;
+};
 
 GEODE_NS_IV_END
