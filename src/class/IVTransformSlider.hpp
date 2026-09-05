@@ -10,8 +10,8 @@ struct LevelSettings;
 class TransformSlider : public cocos2d::CCNode {
 public:
     TransformSlider(LevelSettings& setting);
-    static TransformSlider* create(LevelSettings& setting, NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc);
-    bool init(NodeTransform LevelSettings::* transform, PlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc);
+    static TransformSlider* create(LevelSettings& setting, NodeTransform LevelSettings::* transform, IVPlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc);
+    bool init(NodeTransform LevelSettings::* transform, IVPlayerInputNode* inputNode, char const* text, std::function<NodeTransform()>&& defaultPosFunc);
 public:
     void setLevelSettings(LevelSettingsType type);
     void onDefaultPosition(cocos2d::CCObject*);
@@ -21,7 +21,7 @@ protected:
 protected:
     std::reference_wrapper<LevelSettings> m_currentSetting;
     NodeTransform LevelSettings::* m_transform;
-    PlayerInputNode* m_inputNode = nullptr;
+      IVPlayerInputNode* m_inputNode = nullptr;
     FloatSlider* m_xPosSlider = nullptr;
     FloatSlider* m_yPosSlider = nullptr;
     FloatSlider* m_scaleSlider = nullptr;
