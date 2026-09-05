@@ -25,161 +25,159 @@ SettingsLayer* SettingsLayer::create(
     if (ret && ret->init(
         350.f,
         260.f,
-        enableGeodeSettingButton
+        "GJ_square01.png"
     )) {
+        ret->m_isInSetting = true;
+
+        ret->setTitle("Inputs Viewer Config");
+        ret->setColor({127, 127, 127});
+        ret->setOpacity(255);
+
+        if (enableGeodeSettingButton) {
+            auto modSettingsBtn = CCMenuItemSpriteExtra::create(
+                CCSprite::createWithSpriteFrameName(
+                    "GJ_optionsBtn02_001.png"
+                ),
+                ret,
+                menu_selector(SettingsLayer::onModSettings)
+            );
+
+            ret->m_buttonMenu->addChildAtPosition(
+                modSettingsBtn,
+                Anchor::TopRight,
+                ccp(-3.f, -3.f)
+            );
+        }
+
+        auto classicBtnSpr = ButtonSprite::create(
+            "Classic",
+            "bigFont.fnt",
+            "GJ_button_04.png"
+        );
+
+        classicBtnSpr->setScale(0.5f);
+
+        ret->m_classicBtn = CCMenuItemSpriteExtra::create(
+            classicBtnSpr,
+            ret,
+            menu_selector(SettingsLayer::onClassic)
+        );
+
+        ret->m_buttonMenu->addChildAtPosition(
+            ret->m_classicBtn,
+            Anchor::TopLeft,
+            ccp(62.f, 0.f)
+        );
+
+        auto platformerBtnSpr = ButtonSprite::create(
+            "Platformer",
+            "bigFont.fnt",
+            "GJ_button_04.png"
+        );
+
+        platformerBtnSpr->setScale(0.5f);
+
+        ret->m_platformerBtn = CCMenuItemSpriteExtra::create(
+            platformerBtnSpr,
+            ret,
+            menu_selector(SettingsLayer::onPlatformer)
+        );
+
+        ret->m_buttonMenu->addChildAtPosition(
+            ret->m_platformerBtn,
+            Anchor::TopLeft,
+            ccp(154.f, 0.f)
+        );
+
+        ret->m_inputsLayer = InputsViewLayer::create(
+            ret->m_currentSettingType
+        );
+
+        if (!ret->m_inputsLayer) {
+            delete ret;
+            return nullptr;
+        }
+
+        ret->m_inputsLayer->setPosition(
+            CCDirector::get()->getWinSize() * 0.5f
+        );
+
+        ret->insertBefore(
+            ret->m_inputsLayer,
+            ret->m_mainLayer
+        );
+
+        ret->m_p1Slider = TransformSlider::create(
+            ret->m_currentSetting,
+            &LevelSettings::p1Transform,
+            ret->m_inputsLayer->m_p1InputNode,
+            "P1 Input",
+            IVManager::getDefaultP1Transform
+        );
+
+        if (!ret->m_p1Slider) {
+            delete ret;
+            return nullptr;
+        }
+
+        ret->m_mainLayer->addChildAtPosition(
+            ret->m_p1Slider,
+            Anchor::Center,
+            ccp(-80.f, 20.f)
+        );
+
+        ret->m_p2Slider = TransformSlider::create(
+            ret->m_currentSetting,
+            &LevelSettings::p2Transform,
+            ret->m_inputsLayer->m_p2InputNode,
+            "P2 Input",
+            IVManager::getDefaultP2Transform
+        );
+
+        if (!ret->m_p2Slider) {
+            delete ret;
+            return nullptr;
+        }
+
+        ret->m_mainLayer->addChildAtPosition(
+            ret->m_p2Slider,
+            Anchor::Center,
+            ccp(80.f, 20.f)
+        );
+
+        ret->m_totalInputsCheckbox = ret->createCheckbox(
+            &LevelSettings::showTotalInputs,
+            "Show Total Inputs",
+            SettingEventType::KeyAppearance,
+            Anchor::Center,
+            ccp(-90.f, -50.f)
+        );
+
+        ret->m_cpsCheckbox = ret->createCheckbox(
+            &LevelSettings::showCPS,
+            "Show Clicks per Seconds",
+            SettingEventType::KeyAppearance,
+            Anchor::Center,
+            ccp(-90.f, -80.f)
+        );
+
+        ret->m_hideLRCheckbox = ret->createCheckbox(
+            &LevelSettings::hideLeftRight,
+            "Hide L&R Keys",
+            SettingEventType::KeyAppearance,
+            Anchor::Center,
+            ccp(-90.f, -110.f),
+            "Hide the left and right keys."
+        );
+
+        ret->updateSettingNodes();
+
         ret->autorelease();
         return ret;
     }
 
     delete ret;
     return nullptr;
-}
-
-bool SettingsLayer::setup(
-    float width,
-    float height,
-    bool enableGeodeSettingButton
-) {
-    IVManager::get().m_isInSetting = true;
-
-    this->setTitle("Inputs Viewer Config");
-    this->setColor({127, 127, 127});
-    this->setOpacity(255);
-
-    if (enableGeodeSettingButton) {
-        auto modSettingsBtn = CCMenuItemSpriteExtra::create(
-            CCSprite::createWithSpriteFrameName(
-                "GJ_optionsBtn02_001.png"
-            ),
-            this,
-            menu_selector(SettingsLayer::onModSettings)
-        );
-
-        m_buttonMenu->addChildAtPosition(
-            modSettingsBtn,
-            Anchor::TopRight,
-            ccp(-3.f, -3.f)
-        );
-    }
-
-    auto classicBtnSpr = ButtonSprite::create(
-        "Classic",
-        "bigFont.fnt",
-        "GJ_button_04.png"
-    );
-
-    classicBtnSpr->setScale(0.5f);
-
-    m_classicBtn = CCMenuItemSpriteExtra::create(
-        classicBtnSpr,
-        this,
-        menu_selector(SettingsLayer::onClassic)
-    );
-
-    m_buttonMenu->addChildAtPosition(
-        m_classicBtn,
-        Anchor::TopLeft,
-        ccp(62.f, 0.f)
-    );
-
-    auto platformerBtnSpr = ButtonSprite::create(
-        "Platformer",
-        "bigFont.fnt",
-        "GJ_button_04.png"
-    );
-
-    platformerBtnSpr->setScale(0.5f);
-
-    m_platformerBtn = CCMenuItemSpriteExtra::create(
-        platformerBtnSpr,
-        this,
-        menu_selector(SettingsLayer::onPlatformer)
-    );
-
-    m_buttonMenu->addChildAtPosition(
-        m_platformerBtn,
-        Anchor::TopLeft,
-        ccp(154.f, 0.f)
-    );
-
-    m_inputsLayer = InputsViewLayer::create(
-        m_currentSettingType
-    );
-
-    if (!m_inputsLayer)
-        return false;
-
-    m_inputsLayer->setPosition(
-        CCDirector::get()->getWinSize() * 0.5f
-    );
-
-    this->insertBefore(
-        m_inputsLayer,
-        m_mainLayer
-    );
-
-    m_p1Slider = TransformSlider::create(
-        m_currentSetting,
-        &LevelSettings::p1Transform,
-        m_inputsLayer->m_p1InputNode,
-        "P1 Input",
-        IVManager::getDefaultP1Transform
-    );
-
-    if (!m_p1Slider)
-        return false;
-
-    m_mainLayer->addChildAtPosition(
-        m_p1Slider,
-        Anchor::Center,
-        ccp(-80.f, 20.f)
-    );
-
-    m_p2Slider = TransformSlider::create(
-        m_currentSetting,
-        &LevelSettings::p2Transform,
-        m_inputsLayer->m_p2InputNode,
-        "P2 Input",
-        IVManager::getDefaultP2Transform
-    );
-
-    if (!m_p2Slider)
-        return false;
-
-    m_mainLayer->addChildAtPosition(
-        m_p2Slider,
-        Anchor::Center,
-        ccp(80.f, 20.f)
-    );
-
-    m_totalInputsCheckbox = this->createCheckbox(
-        &LevelSettings::showTotalInputs,
-        "Show Total Inputs",
-        SettingEventType::KeyAppearance,
-        Anchor::Center,
-        ccp(-90.f, -50.f)
-    );
-
-    m_cpsCheckbox = this->createCheckbox(
-        &LevelSettings::showCPS,
-        "Show Clicks per Seconds",
-        SettingEventType::KeyAppearance,
-        Anchor::Center,
-        ccp(-90.f, -80.f)
-    );
-
-    m_hideLRCheckbox = this->createCheckbox(
-        &LevelSettings::hideLeftRight,
-        "Hide L&R Keys",
-        SettingEventType::KeyAppearance,
-        Anchor::Center,
-        ccp(-90.f, -110.f),
-        "Hide the left and right keys."
-    );
-
-    this->updateSettingNodes();
-
-    return true;
 }
 
 void SettingsLayer::onClassic(CCObject*) {
@@ -270,7 +268,8 @@ CCMenuItemToggler* SettingsLayer::createCheckbox(
             m_currentSetting.get().*member = !btn->isToggled();
 
             if (postEvent) {
-                IVSettingEvent(*postEvent).post();
+                IVSettingEvent event(*postEvent);
+                event.send();
             }
         }
     );
@@ -342,9 +341,11 @@ void SettingsLayer::onModSettings(CCObject*) {
 void SettingsLayer::onExit() {
     IVManager::get().m_isInSetting = false;
 
-    IVSettingEvent(
+    IVSettingEvent event(
         SettingEventType::RefreshView
-    ).post();
+    );
+
+    event.send();
 
     Popup::onExit();
 }
