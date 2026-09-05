@@ -17,7 +17,13 @@ public:
 
     bool init() override;
 
-    void handleButton(bool down, PlayerButton input, bool isP1, bool updateCounters);
+    void handleButton(
+        bool down,
+        PlayerButton input,
+        bool isP1,
+        bool updateCounters = true
+    );
+
     LevelSettings const& getLevelSettings() const noexcept;
     void setLevelSettings(LevelSettingsType type);
     void releaseAllButtons();
@@ -25,14 +31,15 @@ public:
 
     void onSettingEvent(SettingEventType);
 
-protected:
-    std::reference_wrapper<LevelSettings> m_currentSetting;
-
+public:
     IVPlayerInputNode* m_p1InputNode = nullptr;
     IVPlayerInputNode* m_p2InputNode = nullptr;
 
-    // Geode 5 removed EventListener, so this member is gone.
-    // geode::EventListener<IVSettingFilter> m_settingListener;
+protected:
+    std::reference_wrapper<LevelSettings> m_currentSetting;
+
+    // Geode 5 removed the old EventListener API.
+    // Event listening will be handled separately.
 };
 
 GEODE_NS_IV_END
