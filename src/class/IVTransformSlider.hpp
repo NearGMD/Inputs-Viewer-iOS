@@ -2,6 +2,7 @@
 #include "IVPlayerInputNode.hpp"
 #include "IVFloatSlider.hpp"
 #include "IVLevelSettings.hpp"
+#include "node/IVPlayerInputNode.hpp"
 
 GEODE_NS_IV_BEGIN
 
