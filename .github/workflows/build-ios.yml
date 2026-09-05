@@ -1,0 +1,17 @@
+name: Build iOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          echo "Proyecto descargado correctamente"
+          echo "Aquí irá el proceso de compilación iOS"
