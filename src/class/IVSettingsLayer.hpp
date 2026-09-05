@@ -18,21 +18,13 @@ public:
         bool enableGeodeSettingButton
     );
 
-public:
     void onModSettings(cocos2d::CCObject*);
     void onClassic(cocos2d::CCObject*);
     void onPlatformer(cocos2d::CCObject*);
 
-public:
     void onExit() override;
 
 protected:
-    bool setup(
-        float width,
-        float height,
-        bool enableGeodeSettingButton
-    );
-
     void setLevelSettings(LevelSettingsType type);
     void updateSettingNodes();
 
@@ -61,6 +53,8 @@ protected:
     CCMenuItemToggler* m_totalInputsCheckbox = nullptr;
     CCMenuItemToggler* m_cpsCheckbox = nullptr;
     CCMenuItemToggler* m_hideLRCheckbox = nullptr;
+
+    bool m_enableGeodeSettingButton = false;
 };
 
 GEODE_NS_IV_END
