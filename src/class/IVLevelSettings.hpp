@@ -5,7 +5,10 @@
 #include <matjson.hpp>
 
 GEODE_NS_IV_BEGIN
-
+enum class LevelSettingsType {
+    Classic,
+    Platformer
+};
 struct NodeTransform {
     cocos2d::CCPoint position;
     float scale;
