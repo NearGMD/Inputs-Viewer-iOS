@@ -9,9 +9,7 @@ void IVLayout::applyVerticalLayout(CCArray* nodes, const IVStyle& style) {
 
     float y = 0.f;
 
-    CCObject* obj;
-    CCARRAY_FOREACH(nodes, obj) {
-        auto node = dynamic_cast<IVNodeBase*>(obj);
+    for (auto node : CCArrayExt<IVNodeBase*>(nodes)) {
         if (!node) continue;
 
         node->setPosition({0.f, y});
@@ -24,9 +22,7 @@ void IVLayout::applyHorizontalLayout(CCArray* nodes, const IVStyle& style) {
 
     float x = 0.f;
 
-    CCObject* obj;
-    CCARRAY_FOREACH(nodes, obj) {
-        auto node = dynamic_cast<IVNodeBase*>(obj);
+    for (auto node : CCArrayExt<IVNodeBase*>(nodes)) {
         if (!node) continue;
 
         node->setPosition({x, 0.f});
