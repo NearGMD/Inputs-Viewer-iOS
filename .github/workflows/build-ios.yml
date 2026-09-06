@@ -18,8 +18,18 @@ jobs:
           sdk: 5.7.1
           target: iOS
 
+      - name: Inspect build output
+        run: |
+          echo "=== BUILD OUTPUT ==="
+          echo "${{ steps.build.outputs.build-output }}"
+          echo "=== FILE TYPE ==="
+          file "${{ steps.build.outputs.build-output }}"
+          echo "=== FILE SIZE ==="
+          ls -lh "${{ steps.build.outputs.build-output }}"
+
       - name: Upload mod
         uses: actions/upload-artifact@v4
         with:
           name: Inputs-Viewer-iOS
           path: ${{ steps.build.outputs.build-output }}
+          if-no-files-found: error
