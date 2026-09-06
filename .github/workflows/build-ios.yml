@@ -22,10 +22,15 @@ jobs:
         run: |
           echo "=== BUILD OUTPUT ==="
           echo "${{ steps.build.outputs.build-output }}"
-          echo "=== FILE TYPE ==="
-          file "${{ steps.build.outputs.build-output }}"
-          echo "=== FILE SIZE ==="
-          ls -lh "${{ steps.build.outputs.build-output }}"
+
+          echo "=== OUTPUT DIRECTORY ==="
+          ls -lah "${{ steps.build.outputs.build-output }}"
+
+          echo "=== GEODE FILE TYPE ==="
+          file "${{ steps.build.outputs.build-output }}/khronophobia.inputs_viewer.geode"
+
+          echo "=== GEODE CONTENTS ==="
+          unzip -l "${{ steps.build.outputs.build-output }}/khronophobia.inputs_viewer.geode"
 
       - name: Upload mod
         uses: actions/upload-artifact@v4
